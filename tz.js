@@ -28,28 +28,37 @@ function shedule() {
             cost: 2
         }
         ],
-        paths = [];
-    console.log(roads);
+        paths = [],
+        pathID = 0;
 
     roads.sort((a, b) => {
         return a.cost - b.cost
     });
 
+
     let getLowestCost = roads.reduce((lowestCost, road) => {
-        
-        let lowestRoad = roads[0];
+
+        let lowestRoad = roads[0],
+            path = {};
         lowestCost.push(lowestRoad);
 
-        roads.forEach(road => {
-            if (road.fromCity === lowestRoad.fromCity || road.toCity === lowestRoad.toCity) {
-                roads.splice(roads.indexOf(road), 1);
+        path.id = lowestRoad.id;
+        path.cities = [];
+        path.cities.push(lowestRoad.fromCity);
+        path.cities.push(lowestRoad.toCity);
+        path.cities = [...new Set(path.cities)];
+        path.id = lowestRoad.id;
+
+        paths.push(path);
+        pathID++;
+
+        roads.forEach(curRoad => {
+            if (curRoad.fromCity === lowestRoad.fromCity || curRoad.toCity === lowestRoad.toCity) {
+                roads.splice(roads.indexOf(curRoad), 1);
             }
         })
 
         roads.splice(0, 1);
-
-        console.log(`Road`, roads);
-        console.log(`lowestCost`, lowestCost);
 
         return lowestCost
     }, []);
@@ -60,6 +69,10 @@ function shedule() {
     }, 0)
 
     console.log(getLowestCost.length, costSum);
+    paths.forEach(() => {
+        
+        console.log(this.cities.length)
+    })
 
 }
 shedule();
